@@ -2,320 +2,483 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Orçamento RJ AR-CONDICIONADO</title>
+    <title>Orçamentos RJ</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f5f5f5;
             margin: 0;
-            padding: 0;
+            padding: 20px;
         }
-
         .container {
             max-width: 800px;
-            margin: 40px auto;
+            margin: 0 auto;
             background-color: white;
-            padding: 40px;
+            padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
-
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
-
         .header h1 {
             color: #0077b6;
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 28px;
+            margin: 0;
         }
-
         .header p {
             color: #666;
-            font-size: 16px;
+            font-size: 14px;
+            margin: 5px 0 0;
         }
-
-        .form-group {
+        .tab {
+            overflow: hidden;
             margin-bottom: 20px;
         }
-
+        .tab button {
+            background-color: #f2f2f2;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 12px 18px;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+        .tab button:hover {
+            background-color: #ddd;
+        }
+        .tab button.active {
+            background-color: #0077b6;
+            color: white;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .tabcontent {
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
         .form-group label {
             display: block;
             font-weight: bold;
             color: #333;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
-
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
-            font-size: 16px;
+            font-size: 14px;
         }
-
         .form-group textarea {
             resize: vertical;
+            min-height: 80px;
         }
-
         .btn {
             background-color: #0077b6;
             color: white;
             border: none;
-            padding: 12px 24px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
+            padding: 10px 20px;
+            font-size: 14px;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
         .btn:hover {
             background-color: #005a8c;
         }
-
+        .btn-remove {
+            background-color: #e74c3c;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .btn-remove:hover {
+            background-color: #c0392b;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 16px;
+            margin: 15px 0;
+            font-size: 14px;
         }
-
         table th, table td {
-            padding: 12px;
+            padding: 10px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-
         table th {
             background-color: #f2f2f2;
+        }
+        .total {
+            text-align: right;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Orçamento RJ AR-CONDICIONADO</h1>
+            <h1>Orçamentos RJ</h1>
             <p>Solicite seu orçamento personalizado</p>
         </div>
-        
-        <div class="form-group">
-            <label for="data">Data:</label>
-            <input type="date" id="data" required>
+
+        <!-- Abas -->
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab('servicos')">Serviços</button>
+            <button class="tablinks" onclick="openTab('vendas')">Vendas</button>
         </div>
 
-        <div class="form-group">
-            <label for="cliente">Nome do Cliente:</label>
-            <input type="text" id="cliente" placeholder="Nome completo do cliente" required>
+        <!-- Aba de Serviços -->
+        <div id="servicos" class="tabcontent" style="display: block;">
+            <div class="form-group">
+                <label for="data-servicos">Data:</label>
+                <input type="date" id="data-servicos" required>
+            </div>
+            <div class="form-group">
+                <label for="cliente-servicos">Nome do Cliente:</label>
+                <input type="text" id="cliente-servicos" placeholder="Nome completo" required>
+            </div>
+            <div class="form-group">
+                <label for="cnpjcpf-servicos">CNPJ/CPF:</label>
+                <input type="text" id="cnpjcpf-servicos" placeholder="00.000.000/0000-00 ou 000.000.000-00" required>
+            </div>
+            <div class="form-group">
+                <label for="telefone-servicos">Telefone (opcional):</label>
+                <input type="text" id="telefone-servicos" placeholder="(00) 00000-0000">
+            </div>
+            <div class="form-group">
+                <label for="servico">Serviço:</label>
+                <select id="servico" required>
+                    <option value="">Selecione um serviço...</option>
+                    <option value="1">1 - INSTALAÇÃO</option>
+                    <option value="2">2 - LIMPEZA/HIGIENIZAÇÃO</option>
+                    <option value="3">3 - MANUTENÇÃO</option>
+                    <option value="4">4 - TROCA COMPRESSOR</option>
+                    <option value="5">5 - TROCA PLACA/CAPACITOR</option>
+                    <option value="6">6 - REALOCAÇÃO</option>
+                    <option value="7">7 - INFRAESTRUTURA/OBRA</option>
+                    <option value="8">8 - TUBULAÇÃO P GÁS</option>
+                    <option value="9">9 - RECARGA GÁS</option>
+                </select>
+                <input type="number" id="quantidade-servicos" placeholder="Quantidade" value="1" min="1" required>
+                <input type="number" id="valor-servicos" placeholder="Valor" step="0.01" min="0" required>
+                <button class="btn" onclick="adicionarServico()">Adicionar</button>
+            </div>
+            <table id="tabelaServicos">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descrição</th>
+                        <th>Quant</th>
+                        <th>Valor</th>
+                        <th>Total</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="servicos-tabela"></tbody>
+            </table>
+            <div id="total-servicos" class="total">Total: R$ 0,00</div>
+            <div class="form-group">
+                <label for="formaPagamento-servicos">Forma de Pagamento:</label>
+                <select id="formaPagamento-servicos" required>
+                    <option value="">Selecione...</option>
+                    <option value="avista">À vista</option>
+                    <option value="parcelado">Parcelado</option>
+                    <option value="cartao">Cartão</option>
+                    <option value="pix">PIX</option>
+                    <option value="dinheiro">Dinheiro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="prazoEntrega-servicos">Prazo de Entrega:</label>
+                <input type="text" id="prazoEntrega-servicos" placeholder="Ex.: 5 dias úteis" required>
+            </div>
+            <div class="form-group">
+                <label for="observacoes-servicos">Observações:</label>
+                <textarea id="observacoes-servicos" required>Este orçamento não inclui serviço de dreno, parte elétrica e alvenaria
+
+Este orçamento tem validade de 10 dias. Após este período, favor consulte-nos novamente.</textarea>
+            </div>
+            <div class="actions">
+                <button class="btn" onclick="gerarPDFServicos()">Gerar PDF</button>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="cnpjcpf">CNPJ/CPF do Cliente:</label>
-            <input type="text" id="cnpjcpf" placeholder="00.000.000/0000-00 ou 000.000.000-00" pattern="(\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2})|(\d{3}\.\d{3}\.\d{3}-\d{2})" required>
-        </div>
-
-        <div class="form-group">
-            <label for="servico">Serviço:</label>
-            <select id="servico" required>
-                <option value="">Selecione um serviço...</option>
-                <option value="1">1 - INSTALAÇÃO</option>
-                <option value="2">2 - LIMPEZA/HIGIENIZAÇÃO</option>
-                <option value="3">3 - MANUTENÇÃO</option>
-                <option value="4">4 - TROCA COMPRESSOR</option>
-                <option value="5">5 - TROCA PLACA/CAPACITOR</option>
-                <option value="6">6 - REALOCAÇÃO</option>
-                <option value="7">7 - INFRAESTRUTURA/OBRA</option>
-                <option value="8">8 - TUBULAÇÃO P GÁS</option>
-                <option value="9">9 - RECARGA GÁS</option>
-            </select>
-            <input type="number" id="quantidade" placeholder="Quantidade" value="1" required>
-            <input type="number" id="valor" placeholder="Valor" step="0.01" required>
-            <button class="btn" onclick="adicionarServico()">Adicionar Serviço</button>
-        </div>
-
-        <table id="tabelaServicos">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Descrição</th>
-                    <th>Quant</th>
-                    <th>Valor</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="servicos"></tbody>
-        </table>
-
-        <div class="form-group">
-            <label for="formaPagamento">Forma de Pagamento:</label>
-            <select id="formaPagamento" required>
-                <option value="">Selecione a forma de pagamento</option>
-                <option value="avista">À vista</option>
-                <option value="parcelado">Parcelado</option>
-                <option value="cartao">Cartão</option>
-                <option value="pix">PIX</option>
-                <option value="dinheiro">Dinheiro</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="prazoEntrega">Prazo de Entrega:</label>
-            <input type="text" id="prazoEntrega" placeholder="Informe o prazo de entrega" required>
-        </div>
-
-        <div class="form-group">
-            <label for="observacoes">Observações:</label>
-            <textarea id="observacoes" rows="4" placeholder="Este orçamento não inclui serviço de dreno, parte elétrica e alvenaria&#10;&#10;Este orçamento tem validade de 10 dias. Após este período, favor consulte-nos novamente." required></textarea>
-        </div>
-
-        <div class="actions">
-            <button class="btn" onclick="gerarPDF()">Gerar PDF</button>
+        <!-- Aba de Vendas -->
+        <div id="vendas" class="tabcontent">
+            <div class="form-group">
+                <label for="data-vendas">Data:</label>
+                <input type="date" id="data-vendas" required>
+            </div>
+            <div class="form-group">
+                <label for="cliente-vendas">Nome do Cliente:</label>
+                <input type="text" id="cliente-vendas" placeholder="Nome completo" required>
+            </div>
+            <div class="form-group">
+                <label for="cnpjcpf-vendas">CNPJ/CPF:</label>
+                <input type="text" id="cnpjcpf-vendas" placeholder="00.000.000/0000-00 ou 000.000.000-00" required>
+            </div>
+            <div class="form-group">
+                <label for="telefone-vendas">Telefone (opcional):</label>
+                <input type="text" id="telefone-vendas" placeholder="(00) 00000-0000">
+            </div>
+            <div class="form-group">
+                <label for="produto">Produto:</label>
+                <input type="text" id="produto" placeholder="Descrição do produto" required>
+                <input type="number" id="quantidade-vendas" placeholder="Quantidade" value="1" min="1" required>
+                <input type="number" id="valor-vendas" placeholder="Valor unitário" step="0.01" min="0" required>
+                <button class="btn" onclick="adicionarProduto()">Adicionar</button>
+            </div>
+            <table id="tabelaProdutos">
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Quant</th>
+                        <th>Valor Unitário</th>
+                        <th>Total</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="produtos-tabela"></tbody>
+            </table>
+            <div id="total-vendas" class="total">Total: R$ 0,00</div>
+            <div class="form-group">
+                <label for="formaPagamento-vendas">Forma de Pagamento:</label>
+                <select id="formaPagamento-vendas" required>
+                    <option value="">Selecione...</option>
+                    <option value="avista">À vista</option>
+                    <option value="parcelado">Parcelado</option>
+                    <option value="cartao">Cartão</option>
+                    <option value="pix">PIX</option>
+                    <option value="dinheiro">Dinheiro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="prazoEntrega-vendas">Prazo de Entrega:</label>
+                <input type="text" id="prazoEntrega-vendas" placeholder="Ex.: 5 dias úteis" required>
+            </div>
+            <div class="form-group">
+                <label for="observacoes-vendas">Observações:</label>
+                <textarea id="observacoes-vendas" placeholder="Validade: 15 dias. Após este período, consulte-nos novamente." required></textarea>
+            </div>
+            <div class="actions">
+                <button class="btn" onclick="gerarPDFVendas()">Gerar PDF</button>
+            </div>
         </div>
     </div>
-
     <script>
-        // Função para formatar CNPJ e CPF
+        // Alternar entre abas
+        function openTab(tabName) {
+            const tabcontent = document.getElementsByClassName("tabcontent");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            const tablinks = document.getElementsByClassName("tablinks");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.querySelector(`button[onclick="openTab('${tabName}')"]`).classList.add("active");
+        }
+
+        // Formatação de CNPJ/CPF
         function formatarDocumento(valor) {
             valor = valor.replace(/\D/g, '');
-            
             if (valor.length <= 11) {
-                // CPF
                 return valor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
             } else {
-                // CNPJ
                 return valor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
             }
         }
-
-        // Adicionar o evento de formatação ao campo
-        document.getElementById('cnpjcpf').addEventListener('input', function(e) {
-            let valor = e.target.value;
-            valor = valor.replace(/\D/g, '');
-            if (valor.length <= 14) {
-                e.target.value = formatarDocumento(valor);
-            }
+        document.getElementById('cnpjcpf-servicos').addEventListener('input', function(e) {
+            let valor = e.target.value.replace(/\D/g, '');
+            if (valor.length <= 14) e.target.value = formatarDocumento(valor);
+        });
+        document.getElementById('cnpjcpf-vendas').addEventListener('input', function(e) {
+            let valor = e.target.value.replace(/\D/g, '');
+            if (valor.length <= 14) e.target.value = formatarDocumento(valor);
         });
 
-        // Função para adicionar serviço à tabela
+        // Formatação de Telefone
+        function formatarTelefone(valor) {
+            valor = valor.replace(/\D/g, '');
+            if (valor.length <= 11) {
+                return valor.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            }
+            return valor;
+        }
+        ['telefone-servicos', 'telefone-vendas'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function(e) {
+                e.target.value = formatarTelefone(e.target.value);
+            });
+        });
+
+        // Formatação de Valores
+        function formatarValor(valor) {
+            return `R$ ${parseFloat(valor).toFixed(2).replace('.', ',')}`;
+        }
+
+        // Atualizar Total
+        function atualizarTotal(tabelaId, totalId) {
+            const linhas = document.getElementById(tabelaId).getElementsByTagName('tr');
+            let total = 0;
+            for (let linha of linhas) {
+                const totalCelula = linha.cells[4].textContent.replace('R$ ', '').replace(',', '.');
+                total += parseFloat(totalCelula) || 0;
+            }
+            document.getElementById(totalId).textContent = `Total: ${formatarValor(total)}`;
+        }
+
+        // Adicionar Serviço
         function adicionarServico() {
             const servico = document.getElementById('servico');
-            const quantidade = document.getElementById('quantidade').value;
-            const valor = document.getElementById('valor').value;
-            const total = quantidade * valor;
-
-            // Validação básica
+            const quantidade = document.getElementById('quantidade-servicos').value;
+            const valor = document.getElementById('valor-servicos').value;
             if (!servico.value || !quantidade || !valor) {
-                alert('Por favor, preencha todos os campos do serviço');
+                alert('Preencha todos os campos do serviço!');
                 return;
             }
-
+            const total = quantidade * valor;
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${servico.value}</td>
                 <td>${servico.options[servico.selectedIndex].text}</td>
                 <td>${quantidade}</td>
-                <td>R$ ${parseFloat(valor).toFixed(2)}</td>
-                <td>R$ ${total.toFixed(2)}</td>
+                <td>${formatarValor(valor)}</td>
+                <td>${formatarValor(total)}</td>
+                <td><button class="btn btn-remove" onclick="this.parentElement.parentElement.remove(); atualizarTotal('servicos-tabela', 'total-servicos')">Remover</button></td>
             `;
-
-            document.getElementById('servicos').appendChild(tr);
-
-            // Limpar campos após adicionar
-            servico.selectedIndex = 0;
-            document.getElementById('quantidade').value = 1;
-            document.getElementById('valor').value = '';
+            document.getElementById('servicos-tabela').appendChild(tr);
+            atualizarTotal('servicos-tabela', 'total-servicos');
+            servico.value = '';
+            document.getElementById('quantidade-servicos').value = 1;
+            document.getElementById('valor-servicos').value = '';
         }
 
-        // Função para gerar o PDF usando jsPDF
-        function gerarPDF() {
+        // Adicionar Produto
+        function adicionarProduto() {
+            const produto = document.getElementById('produto').value;
+            const quantidade = document.getElementById('quantidade-vendas').value;
+            const valor = document.getElementById('valor-vendas').value;
+            if (!produto || !quantidade || !valor) {
+                alert('Preencha todos os campos do produto!');
+                return;
+            }
+            const total = quantidade * valor;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${produto}</td>
+                <td>${quantidade}</td>
+                <td>${formatarValor(valor)}</td>
+                <td>${formatarValor(total)}</td>
+                <td><button class="btn btn-remove" onclick="this.parentElement.parentElement.remove(); atualizarTotal('produtos-tabela', 'total-vendas')">Remover</button></td>
+            `;
+            document.getElementById('produtos-tabela').appendChild(tr);
+            atualizarTotal('produtos-tabela', 'total-vendas');
+            document.getElementById('produto').value = '';
+            document.getElementById('quantidade-vendas').value = 1;
+            document.getElementById('valor-vendas').value = '';
+        }
+
+        // Gerar PDF
+        function gerarPDF(tipo) {
+            const prefix = tipo === 'servicos' ? 'servicos' : 'vendas';
+            const data = document.getElementById(`data-${prefix}`).value;
+            const cliente = document.getElementById(`cliente-${prefix}`).value;
+            const cnpjcpf = document.getElementById(`cnpjcpf-${prefix}`).value;
+            const telefone = document.getElementById(`telefone-${prefix}`).value;
+            const formaPagamento = document.getElementById(`formaPagamento-${prefix}`).value;
+            const prazoEntrega = document.getElementById(`prazoEntrega-${prefix}`).value;
+            const observacoes = document.getElementById(`observacoes-${prefix}`).value;
+            const tabelaId = tipo === 'servicos' ? 'servicos-tabela' : 'produtos-tabela';
+
+            if (!data || !cliente || !cnpjcpf || !formaPagamento || !prazoEntrega || !observacoes) {
+                alert('Preencha todos os campos obrigatórios!');
+                return;
+            }
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
-            // Configurações iniciais
             doc.setFont("helvetica");
             doc.setFontSize(12);
 
-            // Cabeçalho
             doc.text("RJ AR CONDICIONADO LTDA", 105, 20, { align: "center" });
             doc.setFontSize(10);
             doc.text("CNPJ: 55.266.053/0001-40 - IE: 004901323.00-24", 105, 30, { align: "center" });
             doc.text("Rua João Lourenço Gomide - Centro - Pains-MG", 105, 35, { align: "center" });
             doc.text("Tel: 37 99876-6121 - Email: rjarcondicionado86@hotmail.com", 105, 40, { align: "center" });
 
-            // Data e Cliente
-            const data = document.getElementById('data').value;
-            const cliente = document.getElementById('cliente').value;
-            const cnpjcpf = document.getElementById('cnpjcpf').value;
-            const observacoes = document.getElementById('observacoes').value;
-            const formaPagamento = document.getElementById('formaPagamento').value;
-            const prazoEntrega = document.getElementById('prazoEntrega').value;
-
-            doc.text(`Data: ${data ? new Date(data).toLocaleDateString('pt-BR') : ''}`, 20, 55);
+            doc.text(`Data: ${new Date(data).toLocaleDateString('pt-BR')}`, 20, 55);
             doc.text(`Cliente: ${cliente}`, 20, 62);
             doc.text(`CNPJ/CPF: ${cnpjcpf}`, 20, 69);
+            let y = telefone ? (doc.text(`Telefone: ${telefone}`, 20, 76), 85) : 78;
 
-            // Tabela de Serviços
-            let y = 85;
-            doc.line(20, y, 190, y); // Linha superior
+            doc.line(20, y, 190, y);
             y += 7;
-            
-            // Cabeçalho da tabela
             doc.setFont("helvetica", "bold");
-            doc.text("Código", 25, y);
-            doc.text("Descrição", 50, y);
+            if (tipo === 'servicos') {
+                doc.text("Código", 25, y);
+                doc.text("Descrição", 50, y);
+            } else {
+                doc.text("Descrição", 25, y);
+            }
             doc.text("Quant", 100, y);
             doc.text("Valor", 130, y);
             doc.text("Total", 160, y);
-            
-            // Dados da tabela
-            doc.setFont("helvetica", "normal");
-            const servicos = document.getElementById('servicos').getElementsByTagName('tr');
-            let total = 0;
 
-            for (let servico of servicos) {
+            doc.setFont("helvetica", "normal");
+            const itens = document.getElementById(tabelaId).getElementsByTagName('tr');
+            let total = 0;
+            for (let item of itens) {
                 y += 7;
-                if (y > 250) {
-                    doc.addPage();
-                    y = 20;
+                if (y > 250) { doc.addPage(); y = 20; }
+                const colunas = item.cells;
+                if (tipo === 'servicos') {
+                    doc.text(colunas[0].textContent, 25, y);
+                    doc.text(colunas[1].textContent, 50, y);
+                    doc.text(colunas[2].textContent, 100, y);
+                    doc.text(colunas[3].textContent, 130, y);
+                    doc.text(colunas[4].textContent, 160, y);
+                } else {
+                    doc.text(colunas[0].textContent, 25, y);
+                    doc.text(colunas[1].textContent, 100, y);
+                    doc.text(colunas[2].textContent, 130, y);
+                    doc.text(colunas[3].textContent, 160, y);
                 }
-                
-                const colunas = servico.getElementsByTagName('td');
-                doc.text(colunas[0].textContent, 25, y);
-                doc.text(colunas[1].textContent, 50, y);
-                doc.text(colunas[2].textContent, 100, y);
-                doc.text(colunas[3].textContent, 130, y);
-                doc.text(colunas[4].textContent, 160, y);
-                
-                total += parseFloat(colunas[4].textContent.replace('R$ ', ''));
+                total += parseFloat(colunas[tipo === 'servicos' ? 4 : 3].textContent.replace('R$ ', '').replace(',', '.'));
             }
 
             y += 10;
             doc.setFont("helvetica", "bold");
-            doc.text(`Total: R$ ${total.toFixed(2)}`, 160, y);
+            doc.text(`Total: ${formatarValor(total)}`, 160, y);
 
-            // Forma de Pagamento e Prazo de Entrega
             y += 20;
             doc.setFont("helvetica", "normal");
-            doc.text(`Forma de Pagamento: ${formaPagamento || 'Não informada'}`, 20, y);
+            doc.text(`Forma de Pagamento: ${formaPagamento}`, 20, y);
             y += 7;
-            doc.text(`Prazo de Entrega: ${prazoEntrega || 'Não informado'}`, 20, y);
-
-            // Observações
+            doc.text(`Prazo de Entrega: ${prazoEntrega}`, 20, y);
             y += 20;
             doc.text("Observações:", 20, y);
             y += 7;
-            const observacoesFixas = "Este orçamento não inclui serviço de dreno, parte elétrica e alvenaria\n\nEste orçamento tem validade de 10 dias. Após este período, favor consulte-nos novamente.";
-            const observacoesLinhas = doc.splitTextToSize(observacoesFixas, 170);
-            doc.text(observacoesLinhas, 20, y);
+            doc.text(doc.splitTextToSize(observacoes, 170), 20, y);
 
-            // Salvar o PDF
-            doc.save('orcamento-rj.pdf');
+            doc.save(`orcamento-${tipo}-rj.pdf`);
         }
+
+        function gerarPDFServicos() { gerarPDF('servicos'); }
+        function gerarPDFVendas() { gerarPDF('vendas'); }
     </script>
 </body>
 </html>
